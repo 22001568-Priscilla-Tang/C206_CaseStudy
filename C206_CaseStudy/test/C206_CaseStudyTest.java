@@ -128,16 +128,14 @@ public class C206_CaseStudyTest {
          assertEquals("Test that Exchange Rate arraylist size is 2.", 2, exchangeRateList.size());
         	
          //attempt to delete one exchange rate 
-         String delExchangeRate = C206_CaseStudy.doDeleteExchangeRate(exchangeRateList, er1.getID());
+         C206_CaseStudy.doDeleteExchangeRate(exchangeRateList, er1.getID());
         	
-         //test exchange rate is deleted successfully
-         assertEquals("Exchange rate deleted successfully", delExchangeRate);
          //test that list size becomes 1
          assertEquals("Test that Exchange Rate arraylist size is 1.", 1, exchangeRateList.size());
         	
          //TEST CASE 2 - Error
          //delete non-existent exchange rate
-         delExchangeRate = C206_CaseStudy.doDeleteExchangeRate(exchangeRateList, er4.getID());
+         C206_CaseStudy.doDeleteExchangeRate(exchangeRateList, er4.getID());
          assertEquals("Test that Exchange Rate arraylist size is 1", 1, exchangeRateList.size());
         	
          //TEST CASE 3 - Boundary
@@ -146,15 +144,13 @@ public class C206_CaseStudyTest {
          C206_CaseStudy.addExchangeRate(exchangeRateList, er5);
         	
          //attempt to delete minimum exchange rate 
-         String delMinRate = C206_CaseStudy.doDeleteExchangeRate(exchangeRateList, er4.getID());
-         assertEquals("Exchange rate deleted successfully", delMinRate);
+         C206_CaseStudy.doDeleteExchangeRate(exchangeRateList, er4.getID());
          
          //test that list size becomes 2 since there are 1(from previous test case) + 2 then minus 1 exchange rate
          assertEquals("Test that Exchange Rate arraylist size is 2.", 2, exchangeRateList.size());
          
          //attempt to delete maximum exchange rate
-         String delMaxRate = C206_CaseStudy.doDeleteExchangeRate(exchangeRateList, er5.getID());
-         assertEquals("Exchange rate deleted successfully", delMaxRate);
+        C206_CaseStudy.doDeleteExchangeRate(exchangeRateList, er5.getID());
         
          //test that list size becomes 1 
          assertEquals("Test that Exchange Rate arraylist size is 1.", 1, exchangeRateList.size());
@@ -164,5 +160,6 @@ public class C206_CaseStudyTest {
    
 
     }
+
 
     

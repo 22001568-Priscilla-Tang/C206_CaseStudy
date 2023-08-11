@@ -10,6 +10,10 @@ public class C206_CaseStudy {
 	
 	private static final int OPTION_DELETE = 3;
 	
+	private static final String idPattern = "ER\\d+$";
+	
+	private static final double MIN_RATE = 0.0;
+			
 	public static void main(String[] args) {		
 		
         ArrayList<ExchangeRate> exchangeRateList = new ArrayList<ExchangeRate>();
@@ -33,16 +37,15 @@ public class C206_CaseStudy {
         		C206_CaseStudy.addExchangeRate(exchangeRateList, er);
         		System.out.println("Exchange Rate added!");
         		
-        }  else if (option == OPTION_VIEW) {
+         }  else if (option == OPTION_VIEW) {
 
         	C206_CaseStudy.viewAllExchangeRates(exchangeRateList);
         	
-        } else if (option == OPTION_DELETE) {
+         } else if (option == OPTION_DELETE) {
             C206_CaseStudy.setHeader("DELETE EXCHANGE RATE");
-            String delExchangeRate = Helper.readString("Enter ID to delete > ");
+            String delExchangeRate = Helper.readStringRegEx("Enter ID to delete > ", idPattern);
             
         	C206_CaseStudy.doDeleteExchangeRate(exchangeRateList, delExchangeRate);
-        	System.out.println ("Exchange Rate removed!");
         	
         } else if (option == OPTION_QUIT) {
 			System.out.println("Thank You for Using Rate Management!");
@@ -81,9 +84,14 @@ public class C206_CaseStudy {
 
 	//================================= Option 1 Add a Rate =================================
 	public static ExchangeRate inputExchangeRate() {
-		String ID = Helper.readString("Enter ID > ");
+		
+		String ID = Helper.readStringRegEx("Enter ID > ", idPattern);
 		double Rate = Helper.readDouble("Enter Rate > ");
 		
+		while (isValidRate(Rate) == false) {
+			System.out.println ("Rate cannot be negative");
+			Rate = Helper.readDouble("Enter new Rate > ");
+		}
 		ExchangeRate er = new ExchangeRate(ID, Rate);
 		return er;
 	}
@@ -122,7 +130,7 @@ public class C206_CaseStudy {
 	}
 
 	//================================= Option 3 Delete Rate =================================
-	public static String doDeleteExchangeRate(ArrayList<ExchangeRate> exchangeRateList, String del) {
+	public static void doDeleteExchangeRate(ArrayList<ExchangeRate> exchangeRateList, String del) {
 		// TODO Auto-generated method stub
 		String output = "";
 		
@@ -140,10 +148,16 @@ public class C206_CaseStudy {
 				output = "Exchange rate cannot be found";
 			}
 		}
-		return output;	
+		System.out.println (output);
 		
 	}
-}
 
+    //function to validate rate
+	public static boolean isValidRate(double rate) {
+		return rate >= MIN_RATE;
+	}
+	
+
+}
 
 
