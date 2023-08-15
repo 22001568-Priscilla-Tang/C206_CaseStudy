@@ -20,8 +20,8 @@ public class C206_CaseStudy {
         
         String allExchangeRates = C206_CaseStudy.retrieveAllExchangeRates(exchangeRateList);
         
-        exchangeRateList.add(new ExchangeRate("ER1", 23.426));
-        exchangeRateList.add(new ExchangeRate("ER2", 0.904));
+        exchangeRateList.add(new ExchangeRate("ER1", "SGD", "TWD",23.426));
+        exchangeRateList.add(new ExchangeRate("ER2", "AUD", "SGD", 0.904));
         
         int option = 0;
         
@@ -86,13 +86,15 @@ public class C206_CaseStudy {
 	public static ExchangeRate inputExchangeRate() {
 		
 		String ID = Helper.readStringRegEx("Enter ID > ", idPattern);
+		String SourceC = Helper.readString("Enter Source Currency > ");
+		String TargetC = Helper.readString("Enter Target Currency > ");
 		double Rate = Helper.readDouble("Enter Rate > ");
 		
 		while (isValidRate(Rate) == false) {
 			System.out.println ("Rate cannot be negative");
 			Rate = Helper.readDouble("Enter new Rate > ");
 		}
-		ExchangeRate er = new ExchangeRate(ID, Rate);
+		ExchangeRate er = new ExchangeRate(ID, SourceC, TargetC, Rate);
 		return er;
 	}
 	
@@ -123,7 +125,7 @@ public class C206_CaseStudy {
 
 	public static void viewAllExchangeRates(ArrayList<ExchangeRate> exchangeRateList) {
 		C206_CaseStudy.setHeader("EXCHANGE RATES LIST");
-		String output = String.format("%-10s %-20s\n", "ID", "RATE");
+		String output = String.format("%-10s %-30s %-20s %-20s\n", "ID", "SOURCE CURRENCY", "TARGET CURRENCY",  "RATE");
 		output += retrieveAllExchangeRates(exchangeRateList);
 		System.out.println(output);
 		
@@ -159,5 +161,3 @@ public class C206_CaseStudy {
 	
 
 }
-
-
