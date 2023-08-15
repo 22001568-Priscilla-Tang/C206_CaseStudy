@@ -9,11 +9,15 @@
 
 public class ExchangeRate {
 	public String ID;
+	public String sourceCurrency;
+	public String targetCurrency;
 	public double rate;
 	public boolean isAvailable;
 	
-	public ExchangeRate (String ID, double rate) {
+	public ExchangeRate (String ID, String sourceCurrency, String targetCurrency, double rate) {
 		this.ID = ID;
+		this.sourceCurrency = sourceCurrency; 
+		this.targetCurrency = targetCurrency;
 		this.rate = rate;
 		this.isAvailable = true;
        }
@@ -23,6 +27,18 @@ public class ExchangeRate {
 	  public void setID(String ID) {
 		  this.ID = ID;
 	  }
+	  public String getSourceCurrency() {
+   	   return sourceCurrency;
+      }
+      public void setSourceCurrency(String SourceCurrency) {
+   	   this.sourceCurrency = SourceCurrency;
+      }
+      public String getTargetCurrency() {
+   	   return targetCurrency;
+      }
+      public void setTargetCurrency(String TargetCurrency) {
+   	   this.targetCurrency = TargetCurrency;
+      }
        public double getRate() {
     	   return rate;
        }
@@ -38,7 +54,7 @@ public class ExchangeRate {
 	   }
 	   
 	   public String toString() {
-		   return String.format("%-10s %-20.2f\n", ID, rate, C206_CaseStudy.showAvailability(isAvailable));
+		   return String.format("%-10s %-30s %-20s %-20.2f\n", ID, sourceCurrency, targetCurrency, rate, C206_CaseStudy.showAvailability(isAvailable));
 	   }
     }
 
