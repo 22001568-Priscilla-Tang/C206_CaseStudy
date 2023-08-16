@@ -1,4 +1,5 @@
-import static org.junit.Assert.assertEquals;  
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -40,9 +41,9 @@ public class C206_CaseStudyTest {
 	// Account Adrian
 	
 	
-	
-	
-	
+	private Account a1;
+	private Account a2;
+	private ArrayList<Account> aList;
 	
 	
 	//
@@ -77,9 +78,9 @@ public class C206_CaseStudyTest {
 		
 		// Account Adrian
 		
-		
-		
-		
+		a1 = new Account("12345", 001, "alice123");
+		a2 = new Account("12345", 002, "johnlol123", 600.70);
+	    aList = new ArrayList<Account>();
 		
 		//
 		
@@ -317,6 +318,60 @@ public class C206_CaseStudyTest {
 		// Delete a User that does not exist in the list
 		c206_CaseStudy.DeleteUser(UserList, "C8282227B");
 		assertEquals("Test tha the userlist size is unchange.", 2, UserList.size());
+	}
+	
+	@Test
+	public void testAddAccount() {
+		assertNotNull("Check if there is valid Account arraylist to add to", aList);
+		
+		C206_CaseStudy.addAccount(aList, a1);
+		assertEquals("Check that Account arraylist size is 1", 1, aList.size());
+		assertSame("Check that Account is added", a1, aList.get(0));
+		
+		C206_CaseStudy.addAccount(aList, a2);
+		assertEquals("Check that Account arraylist size is now 2", 2, aList.size());
+		assertSame("Check that Account is added", a2, aList.get(1));
+		
+	}
+
+	@Test
+	public void testViewAccounts() {
+		
+		assertNotNull("Check if there is valid Account arraylist to retrieve from", aList);
+		
+		String allAccounts= C206_CaseStudy.viewAllAccounts(aList, "12345");
+		String testOutput = String.format("ACCOUNT LIST FOR USER ID %s \n------------------------------------------------------------------\n%-10s %-11s %-10s\n","12345" , "ACCOUNT ID", "STATUS", "BALANCE");
+		
+		assertEquals("Check that ViewAllCamcorderlist", testOutput, allAccounts);
+		
+		C206_CaseStudy.addAccount(aList, a1);
+		C206_CaseStudy.addAccount(aList, a2);
+		
+		assertEquals("Check that Account arraylist size is 2", 2, aList.size());
+		
+		allAccounts = C206_CaseStudy.viewAllAccounts(aList, "12345");
+		
+		testOutput += String.format("%-10d %-12s $%-10.2f\n", 001, "ACTIVE", 0.00);
+		testOutput += String.format("%-10d %-12s $%-10.2f\n", 002, "ACTIVE", 600.70);
+		
+		assertEquals("Test the viewAccounts", allAccounts, testOutput);
+		
+	}
+	
+	public void testRemoveAccount() {
+		
+		assertNotNull("Check if there is a valid Account arraylist to add to", aList);
+		
+		C206_CaseStudy.addAccount(aList, a1);
+		
+		assertEquals("Check that the Account arraylist size is 1", 1, aList.size());
+		
+		assertTrue("Check that the account is removed", C206_CaseStudy.removeAccount(aList, 001, "alice123"));
+		
+		assertTrue("Check that the Account arraylist is now empty", aList.isEmpty());
+		
+		assertFalse("Check that an empty account cannot be removed.", C206_CaseStudy.removeAccount(aList, 005, ""));
+		
 	}
 
 

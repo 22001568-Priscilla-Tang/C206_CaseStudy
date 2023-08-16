@@ -40,10 +40,9 @@ public class C206_CaseStudy {
 		//
 		
 		// Adrian
-		
-		
-		
-		
+		ArrayList<Account> aList = new ArrayList<Account>();
+		aList.add(new Account("C1122334I",001, "Password2", 50.0));
+		aList.add(new Account("C7654321I",002, "Password3", 80.0));
 		//
         
         // =======================================================================================//
@@ -75,24 +74,25 @@ public class C206_CaseStudy {
 							} else if (customer == 3) {
 								// Account
 								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
+								int account = 4;
+								accountMenu();
+								while (account != 4) {
+
+									if (account == 1) {
+
+										addAccount(aList, new Account(uid(),accId(),password()));
+										account = Helper.readInt("1-3 > ");
+									} else if (account == 2) {
+										System.out.println(viewAllAccounts(aList, uid()));
+									} else if (account == 3) {
+										removeAccount(aList, accId(), password());
+										
+									} else if (account == 4) {
+										changeStatus(aList, accId(),password(),status());
+									}
+									account = Helper.readInt("Enter option 1-3 > ");
+									accountMenu();
+								}
 								
 							} else if (customer == 4) {
 								// FeedBack
@@ -600,129 +600,129 @@ public class C206_CaseStudy {
 	
 	//======================================== Account Adrian ========================================//
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public static String uid() {
+		String uid = Helper.readString("Enter user ID > ");
+		return uid;
+	}
+	
+	public static void accountMenu() {
+		System.out.println("------------------------------");
+		System.out.println("1. ADD ACCOUNT");
+		System.out.println("2. VIEW ALL ACCOUNTS");
+		System.out.println("3. REMOVE ACCOUNTS");
+		System.out.println("4. CHANGE STATUS OF ACCOUNT");
+		System.out.println("------------------------------");
+	}
+	
+	public static void addAccount(ArrayList<Account> aList, Account ac) {
+		Account validate;
+		
+		for(int i = 0; i < aList.size(); i++) {
+			validate = aList.get(i);
+			if (validate.getAid() == ac.getAid()) {
+				return;
+			}
+		}
+		
+		if(ac.getUid().isEmpty() || ac.getAid() == 0 || ac.getPassword().isEmpty()) {
+			return;
+		}
+		
+		aList.add(ac);
+		
+	}
+	
+	public static String viewAllAccounts(ArrayList<Account> aList, String uid) {
+		
+		
+		String output = String.format("ACCOUNT LIST FOR USER ID %s \n------------------------------------------------------------------\n%-10s %-11s %-10s\n",uid , "ACCOUNT ID", "STATUS", "BALANCE");
+		
+			
+		String stat;
+		
+		for(int i = 0; i < aList.size(); i++) {
+			if(uid.equals(aList.get(i).getUid())) {
+				
+				if(aList.get(i).isStatus() == true) {
+					stat = "ACTIVE";
+				} else {
+					stat = "INACTIVE";
+				}
+				
+				output += String.format("%-10d %-12s $%-10.2f\n", aList.get(i).getAid(), stat, aList.get(i).getAmount());
+			}
+		}
+		
+		
+		return output;
+	}
+	
+	public static int accId() {
+		int accId = Helper.readInt("Enter the account ID > ");
+		return accId;
+	}
+	
+	public static String password() {
+		String password = Helper.readString("Enter password for account");
+		return password;
+	}
+	
+	public static boolean removeAccount(ArrayList<Account> aList, int accId, String password) {
+		
+		boolean z = false;
+		for (int i = 0; i < aList.size(); i++) {
+			if (aList.get(i).getAid() == accId && aList.get(i).getPassword().equals(password)) {
+				aList.remove(i);
+				z = true;
+			}
+		}
+		
+		if (z == true) {
+			System.out.println("Account successfully removed!");
+		} else {
+			System.out.println("Removal failed!");
+		}
+		
+		return z;
+	}
+	
+	public static String status() {
+		String status = Helper.readString("Enter new status of account (Active/Inactive) > ");
+		return status;
+	}
+	
+	public static boolean changeStatus(ArrayList<Account> aList, int aid, String password, String status) {
+
+		boolean x = false;
+		for (int i = 0; i < aList.size(); i++) {
+			if (aList.get(i).getAid() == aid && aList.get(i).getPassword().equals(password)) {
+				
+				if (status.equalsIgnoreCase("Active")) {
+					
+					aList.get(i).setStatus(true);
+					
+
+					
+				} else if (status.equalsIgnoreCase("Inactive")) {
+					
+					aList.get(i).setStatus(false);
+				}
+				
+				x = true;
+				break;
+				
+			}
+		}
+		
+		if (x == true) {
+			System.out.println(String.format("STATUS SUCCESSFULLY CHANGED TO %s", status));
+		} else {
+			System.out.println("SATUS CHANGE FAILED!");
+		}
+		
+		return x;
+		
+	}
 	
 	
 	
