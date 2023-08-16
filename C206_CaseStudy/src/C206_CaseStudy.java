@@ -43,6 +43,7 @@ public class C206_CaseStudy {
 		ArrayList<Account> aList = new ArrayList<Account>();
 		aList.add(new Account("C1122334I",001, "Password2", 50.0));
 		aList.add(new Account("C7654321I",002, "Password3", 80.0));
+		aList.add(new Account("C1234567I", 003, "Password3", 100.0));
 		//
         
         // =======================================================================================//
