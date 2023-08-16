@@ -48,6 +48,13 @@ public class C206_CaseStudyTest {
 	
 	//
 	
+
+	//SHUYAN
+	private ArrayList<Currency> currencylist;
+	private Currency ccr1;
+	private Currency ccr2;	
+	//
+	
 	public C206_CaseStudyTest() {
 		super();
 	}
@@ -83,6 +90,11 @@ public class C206_CaseStudyTest {
 	    aList = new ArrayList<Account>();
 		
 		//
+	    // SHUYAN
+	    ccr1 = new Currency("CP1", "USD", "SGD", 1.99);
+		ccr2 =  new Currency("CP2", "EUR", "CHF", 100.7);
+		currencylist = new ArrayList<Currency>();	
+	 	//
 		
 	}
 
@@ -90,6 +102,9 @@ public class C206_CaseStudyTest {
 	public void tearDown() throws Exception {
 		exchangeRateList.clear();
 		UserList.clear();
+		ccr1 = null;
+		ccr2 = null;
+		currencylist.clear();
 	}
 
 	@Test
@@ -357,7 +372,7 @@ public class C206_CaseStudyTest {
 		assertEquals("Test the viewAccounts", allAccounts, testOutput);
 		
 	}
-	
+	@Test
 	public void testRemoveAccount() {
 		
 		assertNotNull("Check if there is a valid Account arraylist to add to", aList);
@@ -373,6 +388,64 @@ public class C206_CaseStudyTest {
 		assertFalse("Check that an empty account cannot be removed.", C206_CaseStudy.removeAccount(aList, 005, ""));
 		
 	}
+	@Test
+    public void testAddCurrency() {
+        assertEquals("Test that currency list is empty.", 0, currencylist.size());
+        
+        C206_CaseStudy.addCurrency(currencylist, ccr1);
+        assertEquals("Test that currency list size is 1 after adding a currency.", 1, currencylist.size());
+        
+        assertEquals("test that element added is the same as the arraylist element",currencylist.get(0), ccr1);
+        
+        C206_CaseStudy.addCurrency(currencylist, ccr2);
+        assertEquals("Test that currency list size is 2 after adding another currency.", 2, currencylist.size());
+
+        // error
+        C206_CaseStudy.addCurrency(currencylist, ccr2);
+        assertEquals("Test that currency list size remains 2 after adding an existing currency.", 2, currencylist.size());
+        // boundary
+    	Currency cc_missing = new Currency("CP4", "", "USD", 100.0);
+		C206_CaseStudy.addCurrency(currencylist, cc_missing);
+		assertEquals("Test that the Currency arraylist size is unchange.", 2, currencylist.size());
+    }
+    @Test
+    public void testViewCurrency() {
+    assertNotNull("Test that currency arraylist is not null",currencylist);
+    assertEquals("test that currency arraylist is  empty",0, currencylist.size() );
+    
+    	C206_CaseStudy.addCurrency(currencylist, ccr1);
+    	C206_CaseStudy.addCurrency(currencylist, ccr2);
+    	
+    	String actualoutput = C206_CaseStudy.retrieveAllCurrency(currencylist);
+		assertEquals("Test that Currency arraylist size is 2.", 2, currencylist.size());
+		
+		String expectedOutput = String.format("%-15s %-15s %-18s %-15.2f\n", "CP1", "USD", "SGD", 1.99);
+        expectedOutput += String.format("%-15s %-15s %-18s %-15.2f\n", "CP2", "EUR", "CHF", 100.7);
+		
+        
+        assertEquals("Test that currency list is not empty and displays correctly.", expectedOutput,actualoutput);
+        
+        
+    }
+    @Test
+    public void testDeleteCurrency() {
+        assertEquals("Test that currency list is empty.", 0, currencylist.size());
+
+        C206_CaseStudy.addCurrency(currencylist,ccr1);
+        assertEquals("Test that currency list size is 1 after adding a currency.", 1, currencylist.size());
+
+        C206_CaseStudy.DeleteCurrency(currencylist, "CP1");
+        assertEquals("Test that currency list is empty after deleting a currency.", 0, currencylist.size());
+
+        // Add a currency before testing delete
+        C206_CaseStudy.addCurrency(currencylist,ccr2);
+
+        C206_CaseStudy.DeleteCurrency(currencylist, "CP2");
+        assertEquals("Test that currency list size remains 0 after deleting a currency.", 0, currencylist.size());
+        
+        C206_CaseStudy.DeleteCurrency(currencylist, "Cp3");
+        assertEquals("Test that currency list size remains 0 after attempting to delete a non-existent currency.", 0, currencylist.size());
+    }
 
 
 }
