@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class C206_CaseStudyTest {
-	
+
 	// Exchange Pris
 	private ExchangeRate er1;
 	private ExchangeRate er2;
@@ -39,22 +39,29 @@ public class C206_CaseStudyTest {
 	//
 
 	// Account Adrian
-	
-	
+
+
 	private Account a1;
 	private Account a2;
 	private ArrayList<Account> aList;
-	
-	
+
+
 	//
-	
+
 
 	//SHUYAN
 	private ArrayList<Currency> currencylist;
 	private Currency ccr1;
 	private Currency ccr2;	
 	//
-	
+
+	//glendon
+	private ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
+	private Transaction T1;
+	private Transaction T2;
+	private Transaction T3;
+
+	//
 	public C206_CaseStudyTest() {
 		super();
 	}
@@ -82,20 +89,28 @@ public class C206_CaseStudyTest {
 		ca2 = new User("A6622838D", "Adrian", "CoolPassword", "Cedric@hotmail.com", "83220688", "Administrator");
 		ca3 = new User("A9283922K", "tom", "coolpassword", "tom@hotmail.com", "98982231", "Administrator");
 		ca4 = new User("A9512562E", "jimm", "verycoolpassword", "jimm@hotmail.com", "99172631", "Administrator");
-		
+
 		// Account Adrian
-		
+
 		a1 = new Account("12345", 001, "alice123");
 		a2 = new Account("12345", 002, "johnlol123", 600.70);
-	    aList = new ArrayList<Account>();
-		
+		aList = new ArrayList<Account>();
+
 		//
-	    // SHUYAN
-	    ccr1 = new Currency("CP1", "USD", "SGD", 1.99);
+		// SHUYAN
+		ccr1 = new Currency("CP1", "USD", "SGD", 1.99);
 		ccr2 =  new Currency("CP2", "EUR", "CHF", 100.7);
 		currencylist = new ArrayList<Currency>();	
-	 	//
-		
+		//
+
+		//glendon
+		T1 = new Transaction("T1","2023-08-01", "Cu", -200.0, "debit");
+		T2 = new Transaction("T2", "2023-08-05", "De", 300.0, "credit");
+		T3 = new Transaction("T3", "2023-08-06", "De", 400.0, "credit");
+		exchangeRateList = new ArrayList<ExchangeRate>();
+
+		//
+
 	}
 
 	@After
@@ -105,6 +120,7 @@ public class C206_CaseStudyTest {
 		ccr1 = null;
 		ccr2 = null;
 		currencylist.clear();
+		transactionList.clear();
 	}
 
 	@Test
@@ -334,118 +350,262 @@ public class C206_CaseStudyTest {
 		c206_CaseStudy.DeleteUser(UserList, "C8282227B");
 		assertEquals("Test tha the userlist size is unchange.", 2, UserList.size());
 	}
-	
+
+
 	@Test
 	public void testAddAccount() {
-		assertNotNull("Check if there is valid Account arraylist to add to", aList);
-		
-		C206_CaseStudy.addAccount(aList, a1);
+		assertNotNull("Check if there is valid Account arraylist to add to", aList); //Test case 1: Check to see if it's not a null list
+
+		C206_CaseStudy.addAccount(aList, a1); //Test case 2: Check to see if the account can be added.
 		assertEquals("Check that Account arraylist size is 1", 1, aList.size());
 		assertSame("Check that Account is added", a1, aList.get(0));
-		
-		C206_CaseStudy.addAccount(aList, a2);
+
+		C206_CaseStudy.addAccount(aList, a2); //Test case 3: Check to see if a second account can be added as well.
 		assertEquals("Check that Account arraylist size is now 2", 2, aList.size());
 		assertSame("Check that Account is added", a2, aList.get(1));
-		
+
 	}
 
 	@Test
 	public void testViewAccounts() {
-		
-		assertNotNull("Check if there is valid Account arraylist to retrieve from", aList);
-		
+
+		assertNotNull("Check if there is valid Account arraylist to retrieve from", aList); // Check if it's not a null list
+
 		String allAccounts= C206_CaseStudy.viewAllAccounts(aList, "12345");
 		String testOutput = String.format("ACCOUNT LIST FOR USER ID %s \n------------------------------------------------------------------\n%-10s %-11s %-10s\n","12345" , "ACCOUNT ID", "STATUS", "BALANCE");
-		
-		assertEquals("Check that ViewAllCamcorderlist", testOutput, allAccounts);
-		
+
+		assertEquals("Check that there is the output matches with the output that's supposed to show", testOutput, allAccounts); // Test 1: Test that the UI shows all the accounts that are logged in to the device. 
+
 		C206_CaseStudy.addAccount(aList, a1);
+
+		assertEquals("Check that the Account arraylist size is 1", 1, aList.size()); // Test case 2: Test that the customer can click “View all Accounts” with just 1 account. 
+
 		C206_CaseStudy.addAccount(aList, a2);
-		
-		assertEquals("Check that Account arraylist size is 2", 2, aList.size());
-		
+
+		assertEquals("Check that Account arraylist size is 2", 2, aList.size()); 
+
 		allAccounts = C206_CaseStudy.viewAllAccounts(aList, "12345");
-		
+
 		testOutput += String.format("%-10d %-12s $%-10.2f\n", 001, "ACTIVE", 0.00);
 		testOutput += String.format("%-10d %-12s $%-10.2f\n", 002, "ACTIVE", 600.70);
-		
-		assertEquals("Test the viewAccounts", allAccounts, testOutput);
-		
+
+		assertEquals("Test the viewAccounts", allAccounts, testOutput); // Test case 3: Test that new accounts that are logged in will show up in “View all Accounts” 
+
 	}
+
 	@Test
 	public void testRemoveAccount() {
-		
-		assertNotNull("Check if there is a valid Account arraylist to add to", aList);
-		
-		C206_CaseStudy.addAccount(aList, a1);
-		
-		assertEquals("Check that the Account arraylist size is 1", 1, aList.size());
-		
-		assertTrue("Check that the account is removed", C206_CaseStudy.removeAccount(aList, 001, "alice123"));
-		
-		assertTrue("Check that the Account arraylist is now empty", aList.isEmpty());
-		
-		assertFalse("Check that an empty account cannot be removed.", C206_CaseStudy.removeAccount(aList, 005, ""));
-		
-	}
-	@Test
-    public void testAddCurrency() {
-        assertEquals("Test that currency list is empty.", 0, currencylist.size());
-        
-        C206_CaseStudy.addCurrency(currencylist, ccr1);
-        assertEquals("Test that currency list size is 1 after adding a currency.", 1, currencylist.size());
-        
-        assertEquals("test that element added is the same as the arraylist element",currencylist.get(0), ccr1);
-        
-        C206_CaseStudy.addCurrency(currencylist, ccr2);
-        assertEquals("Test that currency list size is 2 after adding another currency.", 2, currencylist.size());
 
-        // error
-        C206_CaseStudy.addCurrency(currencylist, ccr2);
-        assertEquals("Test that currency list size remains 2 after adding an existing currency.", 2, currencylist.size());
-        // boundary
-    	Currency cc_missing = new Currency("CP4", "", "USD", 100.0);
+		assertNotNull("Check if there is a valid Account arraylist to add to", aList); //Check that the arraylist is not a null list
+
+		C206_CaseStudy.addAccount(aList, a1);
+		C206_CaseStudy.addAccount(aList, a2);
+
+		assertEquals("Check that the Account arraylist size is 2", 2, aList.size()); // Check that the arraylist is now size of 1.
+
+		assertTrue("Check that the account is removed", C206_CaseStudy.removeAccount(aList, 001, "alice123")); // Test case 2: Check that the account is removed once the “Remove Account” button is clicked for a specific account. 
+		assertEquals("Check that the arrayList is now one.", aList.size(), 1);
+
+		assertTrue("Check that the other account is removed.", C206_CaseStudy.removeAccount(aList, 002, "johnlol123"));
+
+		assertTrue("Check that the Account arraylist is now empty", aList.isEmpty()); // Test that multiple accounts can be removed. 
+
+		assertFalse("Check that an empty account cannot be removed.", C206_CaseStudy.removeAccount(aList, 005, "")); // Test case 2: Check that a false account cannot be removed.
+
+		C206_CaseStudy.addAccount(aList, a1);
+
+		assertSame("Check that the account can be added back",a1, aList.get(0)); //Test case 3: Check that after removal, the customer must log back into the account with correct details to access it again. 
+
+	}
+
+	@Test
+	public void testAddCurrency() {
+		assertEquals("Test that currency list is empty.", 0, currencylist.size());
+
+		C206_CaseStudy.addCurrency(currencylist, ccr1);
+		assertEquals("Test that currency list size is 1 after adding a currency.", 1, currencylist.size());
+
+		assertEquals("test that element added is the same as the arraylist element",currencylist.get(0), ccr1);
+
+		C206_CaseStudy.addCurrency(currencylist, ccr2);
+		assertEquals("Test that currency list size is 2 after adding another currency.", 2, currencylist.size());
+
+		// error
+		C206_CaseStudy.addCurrency(currencylist, ccr2);
+		assertEquals("Test that currency list size remains 2 after adding an existing currency.", 2, currencylist.size());
+		// boundary
+		Currency cc_missing = new Currency("CP4", "", "USD", 100.0);
 		C206_CaseStudy.addCurrency(currencylist, cc_missing);
 		assertEquals("Test that the Currency arraylist size is unchange.", 2, currencylist.size());
-    }
-    @Test
-    public void testViewCurrency() {
-    assertNotNull("Test that currency arraylist is not null",currencylist);
-    assertEquals("test that currency arraylist is  empty",0, currencylist.size() );
-    
-    	C206_CaseStudy.addCurrency(currencylist, ccr1);
-    	C206_CaseStudy.addCurrency(currencylist, ccr2);
-    	
-    	String actualoutput = C206_CaseStudy.retrieveAllCurrency(currencylist);
+	}
+	@Test
+	public void testViewCurrency() {
+		assertNotNull("Test that currency arraylist is not null",currencylist);
+		assertEquals("test that currency arraylist is  empty",0, currencylist.size() );
+
+		C206_CaseStudy.addCurrency(currencylist, ccr1);
+		C206_CaseStudy.addCurrency(currencylist, ccr2);
+
+		String actualoutput = C206_CaseStudy.retrieveAllCurrency(currencylist);
 		assertEquals("Test that Currency arraylist size is 2.", 2, currencylist.size());
-		
+
 		String expectedOutput = String.format("%-15s %-15s %-18s %-15.2f\n", "CP1", "USD", "SGD", 1.99);
-        expectedOutput += String.format("%-15s %-15s %-18s %-15.2f\n", "CP2", "EUR", "CHF", 100.7);
-		
-        
-        assertEquals("Test that currency list is not empty and displays correctly.", expectedOutput,actualoutput);
-        
-        
-    }
-    @Test
-    public void testDeleteCurrency() {
-        assertEquals("Test that currency list is empty.", 0, currencylist.size());
+		expectedOutput += String.format("%-15s %-15s %-18s %-15.2f\n", "CP2", "EUR", "CHF", 100.7);
 
-        C206_CaseStudy.addCurrency(currencylist,ccr1);
-        assertEquals("Test that currency list size is 1 after adding a currency.", 1, currencylist.size());
 
-        C206_CaseStudy.DeleteCurrency(currencylist, "CP1");
-        assertEquals("Test that currency list is empty after deleting a currency.", 0, currencylist.size());
+		assertEquals("Test that currency list is not empty and displays correctly.", expectedOutput,actualoutput);
 
-        // Add a currency before testing delete
-        C206_CaseStudy.addCurrency(currencylist,ccr2);
 
-        C206_CaseStudy.DeleteCurrency(currencylist, "CP2");
-        assertEquals("Test that currency list size remains 0 after deleting a currency.", 0, currencylist.size());
-        
-        C206_CaseStudy.DeleteCurrency(currencylist, "Cp3");
-        assertEquals("Test that currency list size remains 0 after attempting to delete a non-existent currency.", 0, currencylist.size());
-    }
+	}
+	@Test
+	public void testDeleteCurrency() {
+		assertEquals("Test that currency list is empty.", 0, currencylist.size());
+
+		C206_CaseStudy.addCurrency(currencylist,ccr1);
+		assertEquals("Test that currency list size is 1 after adding a currency.", 1, currencylist.size());
+
+		C206_CaseStudy.DeleteCurrency(currencylist, "CP1");
+		assertEquals("Test that currency list is empty after deleting a currency.", 0, currencylist.size());
+
+		// Add a currency before testing delete
+		C206_CaseStudy.addCurrency(currencylist,ccr2);
+
+		C206_CaseStudy.DeleteCurrency(currencylist, "CP2");
+		assertEquals("Test that currency list size remains 0 after deleting a currency.", 0, currencylist.size());
+
+		C206_CaseStudy.DeleteCurrency(currencylist, "Cp3");
+		assertEquals("Test that currency list size remains 0 after attempting to delete a non-existent currency.", 0, currencylist.size());
+	}
+
+	@Test // OPTON 1 - ADD TRANSACTION
+	public void testAddTransaction() {
+
+		// TEST CASE 1 - Normal
+		// Transaction list is not null and it is empty
+		assertNotNull("Test if there is a valid Transaction arraylist to add to", transactionList);
+		assertEquals("Test that the Transaction arraylist is empty", 0, transactionList.size());
+
+		// Given an empty list, after adding 1 item, the size of the list is 1
+//		T3 = C206_CaseStudy.inputTransaction(transactionList);
+		C206_CaseStudy.addTransaction(transactionList, T3);
+		assertEquals("Test that the Transaction arraylist size is 1.", 1, transactionList.size());
+		assertSame("Test that Transaction is added to the end of the list.",T3,transactionList.get(0));
+
+		// TEST CASE 2 - Error
+		// Add a transaction that already exists in the list
+		C206_CaseStudy.addTransaction(transactionList, T3);
+		assertEquals("Test that the Transaction arraylist size remains unchanged.", 1, transactionList.size());
+
+		// TEST CASE 3 - Boundary
+		// Adding more transactions to the list
+		Transaction transaction2 = new Transaction("T4", "2023-08-12", "Purchase", 50.0, "debit");
+		Transaction transaction3 = new Transaction("T5", "2023-08-15", "Deposit", 200.0, "credit");
+		C206_CaseStudy.addTransaction(transactionList, transaction2);
+		C206_CaseStudy.addTransaction(transactionList, transaction3);
+		assertEquals("Test that the Transaction arraylist size is 3.", 3, transactionList.size());
+		transactionList.clear();
+	}
+
+
+
+	@Test // OPTION 2 - DISPLAY TRANSACTION
+	public void testGetTransaction() {
+
+	    // TEST CASE 1 - Error
+	    // Test if Transaction list is not null and empty
+	    assertNotNull("Test if there is a valid Transaction arraylist to add to", transactionList);
+	    assertEquals("Test that the Transaction List is empty.", 0, transactionList.size());
+
+	    // Attempt to retrieve transactions
+	    String allTransactions = C206_CaseStudy.getTransaction(transactionList);
+	    String testOutput = String.format("%-10s %-15s %-25s %-8s %-10s\n", "ID", "Date", "Description", "Amount", "Type");
+
+	    // Test if output is empty
+	    assertEquals("Test that nothing is displayed", testOutput, allTransactions);
+	    System.out.println(allTransactions);
+
+	    // TEST CASE 2 - Normal
+	    // Add 2 transactions
+
+	    C206_CaseStudy.addTransaction(transactionList, T1);
+	    C206_CaseStudy.addTransaction(transactionList, T2);
+
+	    // Test that list is not empty - size is 2 after adding 2 transactions
+	    assertEquals("Test that Transaction arraylist size is 2.", 2, transactionList.size());
+
+	    // Attempt to retrieve transactions
+	    String output = String.format("%-10s %-15s %-25s %-8s %-10s\n", "ID", "Date", "Description", "Amount", "Type");
+	    output += String.format("%-10s %-15s %-25s %-10.2f %-10s\n", T1.getTransaction_id(), T1.getDate(),
+	            T1.getDescription(), T1.getAmount(), T1.getTransactionType());
+	    output += String.format("%-10s %-15s %-25s %-10.2f %-10s\n", T2.getTransaction_id(), T2.getDate(),
+	            T2.getDescription(), T2.getAmount(), T2.getTransactionType());
+
+	     allTransactions = C206_CaseStudy.getTransaction(transactionList);
+	    assertEquals("Test that output is correct", output, allTransactions);
+
+	    // TEST CASE 3 - Boundary
+	    // Add 2 more transactions (min and max amounts)
+	    Transaction T5 = new Transaction("T5", "2023-08-15", "De", 200.0, "credit");
+	    Transaction T6 = new Transaction("T6", "2023-08-20", "Pu", -999.99, "debit");
+	    C206_CaseStudy.addTransaction(transactionList, T5);
+	    C206_CaseStudy.addTransaction(transactionList, T6);
+
+	    // Test that list size is 4 (2 added previously, 2 added now)
+	    assertEquals("Test that Transaction arraylist size is 4.", 4, transactionList.size());
+
+	    // Attempt to retrieve transactions
+	    String output2 = String.format("%-10s %-15s %-25s %-8s %-10s\n", "ID", "Date", "Description", "Amount", "Type");
+	    output2 += String.format("%-10s %-15s %-25s %-10.2f %-10s\n", T1.getTransaction_id(), T1.getDate(),
+	            T1.getDescription(), T1.getAmount(), T1.getTransactionType());
+	    output2 += String.format("%-10s %-15s %-25s %-10.2f %-10s\n", T2.getTransaction_id(), T2.getDate(),
+	            T2.getDescription(), T2.getAmount(), T2.getTransactionType());
+	    output2 += String.format("%-10s %-15s %-25s %-10.2f %-10s\n", T5.getTransaction_id(), T5.getDate(),
+	            T5.getDescription(), T5.getAmount(), T5.getTransactionType());
+	    output2 += String.format("%-10s %-15s %-25s %-10.2f %-10s\n", T6.getTransaction_id(), T6.getDate(),
+	            T6.getDescription(), T6.getAmount(), T6.getTransactionType());
+
+	    String allTransactions3 = C206_CaseStudy.getTransaction(transactionList);
+	    assertEquals("Test that output is correct", output2, allTransactions3);
+	}
+
+
+	@Test // OPTION 3 - DELETE TRANSACTION
+	public void testDeleteTransaction() {
+		// TEST CASE 1 - Normal
+		// Add transactions to the list
+		Transaction newTransaction1 = new Transaction("T3", "2023-08-10", "Withdrawal", 100.0, "debit");
+		Transaction newTransaction2 = new Transaction("T4", "2023-08-12", "Purchase", 50.0, "debit");
+		C206_CaseStudy.addTransaction(transactionList, newTransaction1);
+		C206_CaseStudy.addTransaction(transactionList, newTransaction2);
+
+		// Test that list is not empty - size is 2 after adding 2 transactions
+		assertEquals("Test that Transaction arraylist size is 2.", 2, transactionList.size());
+
+		// Delete a transaction
+		C206_CaseStudy.deleteTransaction(transactionList, "T3");
+
+		// Test if a transaction is successfully deleted
+		assertEquals("Test if a transaction is successfully deleted.", 1, transactionList.size());
+
+		// Add assertions to check the behavior after deleting a transaction
+		assertEquals("Test that the Transaction arraylist size is decreased after deleting a transaction.", 1, transactionList.size());
+
+		// TEST CASE 2 - Error
+		// Attempt to delete a non-existing transaction
+		C206_CaseStudy.deleteTransaction(transactionList, "T3");
+
+		// Test that the Transaction arraylist size remains unchanged
+		assertEquals("Test that the Transaction arraylist size remains unchanged after unsuccessful deletion.", 1, transactionList.size());
+
+		// TEST CASE 3 - Boundary
+		// Delete the remaining transaction
+		C206_CaseStudy.deleteTransaction(transactionList, "T4");
+
+	
+
+		// Test that the Transaction arraylist size becomes 0 after deleting the last transaction
+		assertEquals("Test that the Transaction arraylist size becomes 0 after deleting the last transaction.", 0, transactionList.size());
+	}
 
 
 }
