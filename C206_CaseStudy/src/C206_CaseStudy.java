@@ -56,6 +56,12 @@ public class C206_CaseStudy {
 		aList.add(new Account("C7654321I",002, "Password3", 80.0));
 		aList.add(new Account("C1234567I", 003, "Password3", 100.0));
 		//
+		
+		//glendon
+		 ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
+	     transactionList.add(new Transaction("Tb1","2023-08-01", "Currency exchange", 200.0, "debit"));
+	     transactionList.add(new Transaction("T2", "2023-08-05", "Deposit", 300.0, "credit"));
+		//
 
 		// =======================================================================================//
 
@@ -93,7 +99,6 @@ public class C206_CaseStudy {
 									if (account == 1) {
 
 										addAccount(aList, new Account(uid(),accId(),password()));
-										account = Helper.readInt("1-3 > ");
 									} else if (account == 2) {
 										System.out.println(viewAllAccounts(aList, uid()));
 									} else if (account == 3) {
@@ -111,6 +116,27 @@ public class C206_CaseStudy {
 
 							} else if (customer == 5) {
 								// Transaction
+								 int option = -99;
+							        while (option != 4) {
+							            transactionMenu();
+							            option = Helper.readInt("Enter option > ");
+							            if (option == 1) {
+							            	Transaction t = inputTransaction(transactionList);
+							                addTransaction(transactionList, t);
+							            } else if (option == 2) {
+							                getTransaction(transactionList);
+							            } else if (option == 3) {
+							            	getTransaction(transactionList);
+							            	 String transaction_ID = Helper.readString("Enter the transaction ID to delete: ");
+							                deleteTransaction(transactionList, transaction_ID);
+							            }
+							            else if (option ==4 ) {
+							            	System.out.println("Going Back To Admin Menu");
+							            }else {
+							            	System.out.println("Invalid option");
+							            }
+							        }
+
 
 							} else if (customer == 6) {
 								System.out.println("Logging Out");
@@ -303,6 +329,17 @@ public class C206_CaseStudy {
 		System.out.println("3. Delete Currency");
 		System.out.println("4. Back");
 	}
+	
+	 public static void transactionMenu() {       
+		 C206_CaseStudy.setHeader("Transaction Menu");
+	        System.out.println("1. Add Transaction");
+	        System.out.println("2. Display Transaction");
+	        System.out.println("3. Delete Transaction");
+	        System.out.println("4. Back");
+	        
+	    }
+	 
+	 
 
 
 
@@ -883,54 +920,69 @@ public class C206_CaseStudy {
 	//=========================================================================================//
 
 	//======================================== Transaction ========================================//
+	 // OPTION 1- Add Transaction
+    public static Transaction inputTransaction(ArrayList<Transaction> transactionList) {
+    	 String date = Helper.readString("Enter transaction date (YYYY-MM-DD): ");
+         String description = Helper.readString("Enter transaction description: ");
+         double amount = Helper.readDouble("Enter transaction amount: ");
+         String type = Helper.readString("Enter transaction type (credit/debit): ");
+         String transaction_id = String.format("T%d", transactionList.size() + 1);
 
+         Transaction ID = new Transaction(transaction_id, date, description, amount, type);
+         
+         return ID;
+    }
+    
+    
+    public static void addTransaction(ArrayList<Transaction> transactionList, Transaction ID ) {
+    	boolean Valid = true;
+    	for (Transaction transaction : transactionList) {
+    		if (transaction.getTransaction_id().equalsIgnoreCase(ID.getTransaction_id()) == true) {
+    			Valid = false;
+    		} 
+    	}
+    	if (Valid == true) {
+    		transactionList.add(ID);
+        	System.out.println(ID.getTransaction_id() + " sucessfully added in the system");
+    	}
+//       output += retrieveAllTransactions(transactionList);
+//       System.out.println(output);
+      
+    }
 
+    // OPTION 2- Displaying Transaction
+    public static String getTransaction(ArrayList<Transaction> transactionList) {
+        C206_CaseStudy.setHeader("Transaction List:");
+        String output = String.format("%-10s %-15s %-25s %-8s %-10s\n", "ID", "Date", "Description", "Amount", "Type");
+        for (Transaction transaction : transactionList) {
+            output += String.format("%-10s %-15s %-25s %-10.2f %-10s\n", transaction.getTransaction_id(), transaction.getDate(),
+                    transaction.getDescription(), transaction.getAmount(), transaction.getTransactionType());
 
+        }
+        System.out.println(output);
+		return output;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // OPTION 3- Delete Transaction 	
+    public static boolean deleteTransaction(ArrayList<Transaction> transactionList, String transaction_ID) {
+        getTransaction(transactionList); // Display transactions for user reference
+        boolean found = false;
+        
+        for (int i = 0; i < transactionList.size(); i++) {
+            if (transactionList.get(i).getTransaction_id().equalsIgnoreCase(transaction_ID)) {
+                transactionList.remove(i);
+                found = true;
+                System.out.println("Transaction deleted successfully.");
+                break; // Exit the loop once the transaction is found and deleted
+            }
+        }
+        
+        if (!found) {
+            System.out.println("Transaction not found. Unable to delete.");
+        }
+        
+        return found;
+    }
 
 
 	//=========================================================================================//
