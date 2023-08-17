@@ -62,6 +62,14 @@ public class C206_CaseStudyTest {
 	private Transaction T3;
 
 	//
+	//shenghao
+	private feedback fb1;
+	private feedback fb2;
+	private feedback fb3;
+	private feedback fb4;
+	private ArrayList<feedback> feedbackList;
+
+	//
 	public C206_CaseStudyTest() {
 		super();
 	}
@@ -110,6 +118,14 @@ public class C206_CaseStudyTest {
 		exchangeRateList = new ArrayList<ExchangeRate>();
 
 		//
+		//shenghao
+		fb1 = new feedback("FB1", "2123", "21/07/2023", 4, "Effortlessly managing my money is now a reality, thanks to this system. From expense monitoring to investment tracking, it's an all-in-one tool that has enhanced my financial decisions.");
+		fb2 = new feedback("FB2", "2124", "22/07/2023", 5, "The money management system has transformed how I handle money. Clear visualizations, goal-setting tools, and expense categorization have made financial planning a breeze");
+		fb3 = new feedback("FB3", "2125", "23/07/2023", 6, "The money management system exceeded my expectations. Its user-friendly interface made budgeting effortless, and the ability to track expenses in real-time proved invaluable. Setting financial goals and receiving insightful recommendations truly empowered my financial decisions. A highly effective tool for achieving fiscal discipline and growth.");
+		fb4 = new feedback("FB4", "2126", "24/07/2023", 7, "This money management system is a game-changer. It keeps me on top of my spending patterns, and the customized tips for saving have been incredibly valuable.");
+		
+		feedbackList = new ArrayList<feedback>();
+		//
 
 	}
 
@@ -121,6 +137,7 @@ public class C206_CaseStudyTest {
 		ccr2 = null;
 		currencylist.clear();
 		transactionList.clear();
+		feedbackList.clear();
 	}
 
 	@Test
@@ -605,6 +622,118 @@ public class C206_CaseStudyTest {
 
 		// Test that the Transaction arraylist size becomes 0 after deleting the last transaction
 		assertEquals("Test that the Transaction arraylist size becomes 0 after deleting the last transaction.", 0, transactionList.size());
+	}
+
+
+	@Test
+	public void testAddFeedback() {
+		
+		// feedback list is not null and it is empty
+		assertNotNull("Test if there is valid feedback list to add to", feedbackList);
+		
+		// Test Case 1 --> Adding a feedback successfully
+		assertEquals("Test if feedback list is empty", 0 , feedbackList.size());
+		C206_CaseStudy.addFeedback(feedbackList, fb1);
+		assertEquals("Test that the feedback list size is now 1.", 1, feedbackList.size());
+		assertSame("Test that the feedback is added to the end of the list.", fb1, feedbackList.get(0));
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+		// Test Case 2 --> Add a feedback that already exists in the list
+		C206_CaseStudy.addFeedback(feedbackList, fb1);
+		assertEquals("Test that the feedback list size remains the same.", 1, feedbackList.size());
+		
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		// Test Case 3 --> Add 2 feedbacks that are of minimum and maximum length respectively
+		C206_CaseStudy.addFeedback(feedbackList, fb3);
+		C206_CaseStudy.addFeedback(feedbackList, fb4);
+		assertEquals("Test that the feedback list size grows to 3.", 3, feedbackList.size());
+
+
+
+	}
+
+	@Test
+	public void testRetrieveAllFeedback() {
+
+		// feedback list is not null and it is empty
+		assertNotNull("Test if there is valid feedback list to add to", feedbackList);
+		assertEquals("Test that the feedback arraylist is empty.", 0, feedbackList.size());
+
+		// Test Case 1 --> Add nothing
+		String allFeedback = C206_CaseStudy.retrieveFeedback(feedbackList);
+		String outputTest = "";
+		assertEquals("Test that nothing is being displayed", outputTest, allFeedback);
+		
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		// Test Case 2 (Normal Case) --> Add two items into the list and they display it successfully
+		C206_CaseStudy.addFeedback(feedbackList, fb1);
+		assertSame("Test that the feedback is added to the end of the list.", fb1, feedbackList.get(0));
+		C206_CaseStudy.addFeedback(feedbackList, fb2);
+		assertSame("Test that the feedback is added to the end of the list.", fb2, feedbackList.get(1));
+		assertEquals("Test that the feedback arraylist grows to the size of 2.", 2, feedbackList.size());
+		allFeedback = C206_CaseStudy.retrieveFeedback(feedbackList);
+		outputTest = String.format("%-30s %-25s %-15s %-10d %-5s\n",fb1.getFeedback_id(), fb1.getCustomer_id(), fb1.getDate(), fb1.getFeedback_rating(), fb1.getFeedback());
+		outputTest += String.format("%-30s %-25s %-15s %-10d %-5s\n",fb2.getFeedback_id(), fb2.getCustomer_id(), fb2.getDate(), fb2.getFeedback_rating(), fb2.getFeedback());
+		assertEquals("Test that output is correct.", outputTest, allFeedback);
+		
+// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
+		
+		// Test Case 3 --> Display the feedbacks that has minimum and maximum length respectively
+		C206_CaseStudy.addFeedback(feedbackList, fb3);
+		assertSame("Test that the feedback is added to the end of the list.", fb3, feedbackList.get(2));
+		C206_CaseStudy.addFeedback(feedbackList, fb4);
+		assertSame("Test that the feedback is added to the end of the list.", fb4, feedbackList.get(3));
+		assertEquals("Test that the feedback list grows to the size of 4", 4, feedbackList.size());
+		allFeedback = C206_CaseStudy.retrieveFeedback(feedbackList);
+		outputTest += String.format("%-30s %-25s %-15s %-10d %-5s\n", fb3.getFeedback_id(), fb3.getCustomer_id(), fb3.getDate(), fb3.getFeedback_rating(), fb3.getFeedback());
+		outputTest += String.format("%-30s %-25s %-15s %-10d %-5s\n", fb4.getFeedback_id(), fb4.getCustomer_id(), fb4.getDate(), fb4.getFeedback_rating(), fb4.getFeedback());
+		
+		assertEquals("Test that the output shows out correctly", outputTest, allFeedback);
+		
+// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
+		
+	}
+	
+
+	@Test
+	public void testDeleteFeedback() {
+		// feedback list is not null and it is empty
+		assertNotNull("Test if there is valid feedback list to add to", feedbackList);
+
+		// Test case 1 --> Deleting a feedback successfully
+		C206_CaseStudy.addFeedback(feedbackList, fb1);
+		assertSame("Test that the first feedback added into the arraylist is the first item in the feedback list", fb1, feedbackList.get(0));
+		assertEquals("Test that the feedback list size is 1.", 1, feedbackList.size());
+		
+		C206_CaseStudy.deleteFeedback(feedbackList, fb1.getFeedback_id());
+		assertEquals("Test that the feedback arraylist size decreases to 0.", 0, feedbackList.size());
+		
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+		// Test Case 2 --> Deleting a feedback that does not exist inside the list
+		C206_CaseStudy.deleteFeedback(feedbackList, fb3.getFeedback_id());
+		assertEquals("Test that the feedback list size remains the same.", 0, feedbackList.size());
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+		// Test Case 3 --> Delete feedback with max and min length
+		C206_CaseStudy.addFeedback(feedbackList, fb3);
+		assertSame("Test that fb3 is succesfully added into the arraylist.", fb3, feedbackList.get(0));
+		C206_CaseStudy.addFeedback(feedbackList, fb4);
+		assertSame("Test that fb4 is successfully added into the arraylist.", fb4, feedbackList.get(1));
+		assertEquals("Test that the list size grew to 2", 2, feedbackList.size());
+		
+		C206_CaseStudy.deleteFeedback(feedbackList, fb3.getFeedback_id());
+		C206_CaseStudy.deleteFeedback(feedbackList, fb4.getFeedback_id());
+		assertEquals("Test that the feedback arraylist size decreased to 0", 0, feedbackList.size());
+		
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		
+		
 	}
 
 
