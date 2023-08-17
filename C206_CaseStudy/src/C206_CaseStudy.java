@@ -1,6 +1,16 @@
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class C206_CaseStudy {
+	//shenghao
+	private static final String customer_id_pattern = "(C[0-9]{7}[A-Z])";
+	private static final String feedback_rating_pattern = "([0-9]|10)";
+	
+	
+	private static final int OPTION_ADDFEEDBACK = 1;
+	private static final int OPTION_VIEWFEEDBACK = 2;
+	private static final int OPTION_DELETEFEEDBACK = 3;
 
 	// Pris
 	private static final int OPTION_QUIT = 4;
@@ -62,6 +72,15 @@ public class C206_CaseStudy {
 	     transactionList.add(new Transaction("Tb1","2023-08-01", "Currency exchange", 200.0, "debit"));
 	     transactionList.add(new Transaction("T2", "2023-08-05", "Deposit", 300.0, "credit"));
 		//
+		//shenhao
+		ArrayList<feedback> feedbackList = new ArrayList<feedback>();
+		
+		feedbackList.add(new feedback("FB1", "C1122334I", "21/07/2023", 4, "The money management system has transformed how I handle money. Clear visualizations, goal-setting tools, and expense categorization have made financial planning a breeze"));
+		feedbackList.add(new feedback("FB2", "C1122334I", "22/07/2023", 5, "Effortlessly managing my money is now a reality, thanks to this system. From expense monitoring to investment tracking, it's an all-in-one tool that has enhanced my financial decisions."));
+		feedbackList.add(new feedback("FB3", "C1122334I", "23/07/2023", 6, "The money management system exceeded my expectations. Its user-friendly interface made budgeting effortless, and the ability to track expenses in real-time proved invaluable. Setting financial goals and receiving insightful recommendations truly empowered my financial decisions. A highly effective tool for achieving fiscal discipline and growth."));
+		feedbackList.add(new feedback("FB4", "C1122334I", "24/07/2023", 7, "This money management system is a game-changer. It keeps me on top of my spending patterns, and the customized tips for saving have been incredibly valuable."));
+		
+		//
 
 		// =======================================================================================//
 
@@ -113,8 +132,23 @@ public class C206_CaseStudy {
 
 							} else if (customer == 4) {
 								// FeedBack
-
-							} else if (customer == 5) {
+								while(option != 2) {
+									System.out.println("1.Add Feedback");
+									System.out.println("2.Back");
+									option = Helper.readInt("Enter option > ");
+									if(option == 1) {
+										feedback fb = inputFeedback(feedbackList);
+										addFeedback(feedbackList, fb);
+									}
+									if else(option ==2){
+										System.out.println("Back to customer menu");
+									}
+									else{
+									System.out.println("Invalid");
+									}
+								}
+							}
+							 else if (customer == 5) {
 								// Transaction
 								 int option = -99;
 							        while (option != 4) {
@@ -234,7 +268,30 @@ public class C206_CaseStudy {
 
 							} else if (admin == 5) {
 								// FeedBack
-
+									int option = -99;
+								while(option != OPTION_QUIT) {
+									feedbackMenu();
+									option = Helper.readInt("Enter option > ");
+									if(option == OPTION_ADDFEEDBACK) {
+										feedback fb = inputFeedback(feedbackList);
+										addFeedback(feedbackList, fb);
+									}
+									else if(option == OPTION_VIEWFEEDBACK) {
+										viewFeedback(feedbackList);
+									}
+									else if(option == OPTION_DELETEFEEDBACK) {
+										String id = Helper.readString("Enter the feedback id to delete > ");
+										deleteFeedback(feedbackList, id);
+									}
+									else if(option == OPTION_QUIT) {
+										System.out.println("Going back to admin menu");
+									}
+									else {
+										System.out.println("Invalid Option!");
+									}
+									
+								
+								}
 							} else if (admin == 6) {
 								System.out.println("Logging Out");
 							} else {
@@ -338,6 +395,14 @@ public class C206_CaseStudy {
 	        System.out.println("4. Back");
 	        
 	    }
+
+	public static void feedbackMenu() {
+		C206_CaseStudy.setHeader("FEEDBACK MENU");
+		System.out.println("1. Add Feedback");
+		System.out.println("2. View Feedback");
+		System.out.println("3. Delete Feedback");
+	}
+	
 	 
 	 
 
@@ -852,70 +917,97 @@ public class C206_CaseStudy {
 
 	//=========================================== FeedBack =========================================//
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Validation Check on Feedback Length (Minimum Characters/length: 50 char || Maximum characters/length: 1000 char)
+			public static boolean checkLength(String feedback) {
+				if(feedback.length() >= 50 && feedback.length() <= 1000) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			
+			// ---  Adding Rates ---
+			public static feedback inputFeedback(ArrayList<feedback> feedbackList) {
+				
+	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		    	
+		    	String feedback_id = String.format("FB%d", feedbackList.size()+1);
+				LocalDate currentDate = LocalDate.now();
+				String formattedDate = currentDate.format(formatter);
+				String customer_id = Helper.readStringRegEx("Enter your id > ", customer_id_pattern);
+				String feedback_rating = Helper.readStringRegEx("Enter the rating on a scale from 1 to 10 > ", feedback_rating_pattern);
+				String feedback = Helper.readString("Please Enter your feedback > ");
+				while(checkLength(feedback) != true) {
+					System.out.println("Feedback did not meet the necessary requirements, please try again !");
+					feedback = Helper.readString("Please Enter your feedback > ");
+				}
+				
+				int feedback_rating_formatted = Integer.parseInt(feedback_rating);
+				feedback fb = new feedback(feedback_id, customer_id, formattedDate, feedback_rating_formatted, feedback);
+				
+				return fb;
+				
+			}
+			
+		    public static void addFeedback(ArrayList<feedback> feedbackList, feedback fb) {
+		    	for(int i = 0; i < feedbackList.size(); i++) {
+		    		String feedbackID = feedbackList.get(i).getFeedback_id();
+		    		if(feedbackID.equalsIgnoreCase(fb.getFeedback_id())) {
+		    			return;
+		    		}
+		    		if (fb.getFeedback_id().isEmpty()) {
+		    			return;
+		    		}
+		    	}
+		    	
+		    	feedbackList.add(fb);
+				
+			}
+		    
+		    // --- Viewing Feedbacks ---
+		    public static String retrieveFeedback(ArrayList<feedback> feedbackList) {
+		    	String output = "";
+		    	
+		    	for(feedback i : feedbackList) {
+					output += String.format("%-30s %-25s %-15s %-10d %-5s\n", i.getFeedback_id(), i.getCustomer_id(), i.getDate(), i.getFeedback_rating(), i.getFeedback());
+				}
+		    	
+		    	return output;
+		    }
+		    
+			public static void viewFeedback(ArrayList<feedback> feedbackList) {
+				String output = "";
+				
+				C206_CaseStudy.setHeader("FEEDBACK LIST");
+				
+				output += String.format("%-30s %-25s %-15s %-10s %-5s\n", "feedbackID", "CustomerID", "DATE", "Rate", "Feedback");
+				output += retrieveFeedback(feedbackList);
+				
+				System.out.println(output);
+				
+			}
+			
+			// --- Deleting Feedbacks ---
+			public static boolean deleteFeedback(ArrayList<feedback> feedbackList, String id) {
+				
+				boolean isFound = false;
+				
+				for(int i = 0; i < feedbackList.size(); i++) {
+					String feedbackID = feedbackList.get(i).getFeedback_id();
+					if(feedbackID.equalsIgnoreCase(id) == true) {
+						feedbackList.remove(i);
+						isFound = true;
+						System.out.println("Feedback successfully deleted!");
+						break;
+					}
+				}
+				if(isFound == false) {
+					System.out.println("Invalid Feedback ID");
+				}
+				
+				return isFound;
+			}
 
 	//=========================================================================================//
 
