@@ -132,6 +132,7 @@ public class C206_CaseStudy {
 
 							} else if (customer == 4) {
 								// FeedBack
+								int option = -99;
 								while(option != 2) {
 									System.out.println("1.Add Feedback");
 									System.out.println("2.Back");
@@ -140,7 +141,7 @@ public class C206_CaseStudy {
 										feedback fb = inputFeedback(feedbackList);
 										addFeedback(feedbackList, fb);
 									}
-									if else(option ==2){
+									else if(option ==2){
 										System.out.println("Back to customer menu");
 									}
 									else{
