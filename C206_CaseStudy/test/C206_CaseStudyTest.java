@@ -119,10 +119,12 @@ public class C206_CaseStudyTest {
 
 		//
 		//shenghao
-		fb1 = new feedback("FB1", "2123", "21/07/2023", 4, "Effortlessly managing my money is now a reality, thanks to this system. From expense monitoring to investment tracking, it's an all-in-one tool that has enhanced my financial decisions.");
-		fb2 = new feedback("FB2", "2124", "22/07/2023", 5, "The money management system has transformed how I handle money. Clear visualizations, goal-setting tools, and expense categorization have made financial planning a breeze");
-		fb3 = new feedback("FB3", "2125", "23/07/2023", 6, "The money management system exceeded my expectations. Its user-friendly interface made budgeting effortless, and the ability to track expenses in real-time proved invaluable. Setting financial goals and receiving insightful recommendations truly empowered my financial decisions. A highly effective tool for achieving fiscal discipline and growth.");
-		fb4 = new feedback("FB4", "2126", "24/07/2023", 7, "This money management system is a game-changer. It keeps me on top of my spending patterns, and the customized tips for saving have been incredibly valuable.");
+		
+		// Feedbacks were taken from Chat GPT + Google for reference and testing
+		fb1 = new feedback("FB1", "C1122334I", "21/07/2023", 4, "Effortlessly managing my money is now a reality, many thanks to this system. From expense monitoring to investment tracking, it is an all-in-one tool that has enhanced my financial decisions.");
+		fb2 = new feedback("FB2", "C1122335I", "22/07/2023", 5, "The money management system has transformed how I handle money. Clear visualizations, goal-setting tools, and expense categorization have made financial planning a breeze");
+		fb3 = new feedback("FB3", "C1122336I", "23/07/2023", 6, "The money management system went above my expectations. The user-friendly interface made budgeting effortless, and the ability to track expenses in real-time proved invaluable. Setting financial goals and receiving insightful recommendations that truly empowered my financial decisions. It is a highly effective tool for achieving fiscal discipline and growth.");
+		fb4 = new feedback("FB4", "C1122337I", "24/07/2023", 7, "This money management system is a game-changer. It is keeping me on top of my spending patterns as well as the customized tips for saving have been incredibly valuable.");
 		
 		feedbackList = new ArrayList<feedback>();
 		//
