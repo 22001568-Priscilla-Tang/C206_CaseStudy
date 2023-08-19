@@ -75,10 +75,11 @@ public class C206_CaseStudy {
 		//shenhao
 		ArrayList<feedback> feedbackList = new ArrayList<feedback>();
 		
+		// Feedbacks were taken from Chat GPT + Google for reference and testing
 		feedbackList.add(new feedback("FB1", "C1122334I", "21/07/2023", 4, "The money management system has transformed how I handle money. Clear visualizations, goal-setting tools, and expense categorization have made financial planning a breeze"));
-		feedbackList.add(new feedback("FB2", "C1122334I", "22/07/2023", 5, "Effortlessly managing my money is now a reality, thanks to this system. From expense monitoring to investment tracking, it's an all-in-one tool that has enhanced my financial decisions."));
-		feedbackList.add(new feedback("FB3", "C1122334I", "23/07/2023", 6, "The money management system exceeded my expectations. Its user-friendly interface made budgeting effortless, and the ability to track expenses in real-time proved invaluable. Setting financial goals and receiving insightful recommendations truly empowered my financial decisions. A highly effective tool for achieving fiscal discipline and growth."));
-		feedbackList.add(new feedback("FB4", "C1122334I", "24/07/2023", 7, "This money management system is a game-changer. It keeps me on top of my spending patterns, and the customized tips for saving have been incredibly valuable."));
+		feedbackList.add(new feedback("FB2", "C1122335I", "22/07/2023", 5, "Effortlessly managing my money is now a reality, thanks to this system. From expense monitoring to investment tracking, it's an all-in-one tool that has enhanced my financial decisions."));
+		feedbackList.add(new feedback("FB3", "C1122336I", "23/07/2023", 6, "The money management system exceeded my expectations. Its user-friendly interface made budgeting effortless, and the ability to track expenses in real-time proved invaluable. Setting financial goals and receiving insightful recommendations truly empowered my financial decisions. A highly effective tool for achieving fiscal discipline and growth."));
+		feedbackList.add(new feedback("FB4", "C1122337I", "24/07/2023", 7, "This money management system is a game-changer. It keeps me on top of my spending patterns, and the customized tips for saving have been incredibly valuable."));
 		
 		//
 
